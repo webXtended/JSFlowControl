@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Greatest Number</title>
+    <script type="text/javascript" src="../jsflow.js"></script>
+</head>
+<body>
+<input type="text" name="a" value="0"/>
+<input type="text" name="b" value="1"/>
+<input type="text" name="c" value="2"/>
+
+<button onclick="processData()">CHECK</button>
+
+
+<script>
+var flow = JSFlow.getInstance("greatestNumber");
+
+
+
+function processData(){
+  flow.startFlow("readNumbers", null , {});
+}
+
+function readNumbers(){
+    var data = {};
+    var inputs = document.querySelectorAll("input");
+    for(var i=0; i<inputs.length; i++){
+     data[inputs[i].name] = +inputs[i].value;
+    }
+  this.data = data;
+  return data;
+}
+
+function aBiggerThanB(){
+  	var a = this.data.a;
+    var b = this.data.b;
+  	if(a > b){
+      return true;
+    }else{
+      return false;
+    }
+}
+
+function aBiggerThanC(){
+	var a = this.data.a;
+    var c = this.data.c;
+
+  	if(a > c){
+      return true;
+    }else{
+      return false;
+    }
+}
+
+
+function bBiggerThanC(){
+	var b = this.data.b;
+    var c = this.data.c;
+
+  	if(b > c){
+      return true;
+    }else{
+      return false;
+    }
+}
+
+function printA(){
+  console.log("greatest number is " + this.data.a);
+}
+
+function printB(){
+  console.log("greatest number is " + this.data.b);
+}
+
+function printC(){
+  console.log("greatest number is " + this.data.c);
+}
+
+
+flow.addBlock("readNumbers", {fn:readNumbers});
+flow.addBlock("aBiggerThanB", {fn:aBiggerThanB});
+flow.addBlock("aBiggerThanC", {fn:aBiggerThanC});
+flow.addBlock("bBiggerThanC", {fn: bBiggerThanC});
+flow.addBlock("printA", {fn: printA});
+flow.addBlock("printB", {fn: printB});
+flow.addBlock("printC", {fn: printC});
+
+flow.link("readNumbers", "aBiggerThanB");
+flow.branch("aBiggerThanB", "bBiggerThanC", null , {pathValue:false});
+flow.branch("aBiggerThanB", "aBiggerThanC", null , {pathValue:true});
+
+flow.branch("bBiggerThanC", "printB", null , {pathValue:true});
+flow.branch("bBiggerThanC", "printC", null , {pathValue:false});
+
+flow.branch("aBiggerThanC", "printA", null , {pathValue:true});
+flow.branch("aBiggerThanC", "printC", null , {pathValue:false});
+
+
+
+</script>
+
+
+</body>
+</html>
